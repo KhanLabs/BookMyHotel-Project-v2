@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2>My Reservations</h2>
+    {% for res in reservations %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5>{{ res.hotel_name }}</h5>
+            <p>Check-in: {{ res.check_in }} | Total: Rs. {{ res.total_price }}</p>
+            <a href="/cancel/{{ res.id }}" class="btn btn-danger btn-sm">Cancel Reservation</a>
+        </div>
+    </div>
+    {% else %}
+    <p>No bookings found.</p>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5" style="max-width: 700px;">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3>Book Your Stay: {{ hotel.name }}</h3>
+        </div>
+        <div class="card-body">
+            
+            {% if hotel.sustainability_rating >= 7.0 %}
+            <div class="alert alert-success">
+                <strong>🌱 Eco-Friendly Choice!</strong> You will earn 10 Green Points per night for this stay.
+            </div>
+            {% endif %}
+
+            <form method="POST">
+                <div class="mb-3">
+                    <label>Guest Name</label>
+                    <input type="text" name="guest_name" class="form-control" value="{{ user.full_name }}" required>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col">
+                        <label>Check-In Date</label>
+                        <input type="date" id="check_in" name="check_in" class="form-control" required onchange="calculateNights()">
+                    </div>
+                    <div class="col">
+                        <label>Check-Out Date</label>
+                        <input type="date" id="check_out" name="check_out" class="form-control" required onchange="calculateNights()">
+                    </div>
+                </div>
+
+                <div class="mb-3 p-3 bg-light border rounded">
+                    <h5>Duration: <span id="nights_display" class="text-primary fw-bold">0</span> Nights</h5>
+                    <input type="hidden" id="nights_input" name="nights" value="1">
+                    <p class="mb-0 text-muted">Price per night: Rs. {{ hotel.price }}</p>
+                </div>
+
+                <div class="mb-4">
+                    <h5>Add-on Services</h5>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="service_car" id="srv1">
+                        <label class="form-check-label" for="srv1">🚗 Luxury Car Rental (+Rs. 5000)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="service_spa" id="srv2">
+                        <label class="form-check-label" for="srv2">💆 Spa Package (+Rs. 3000)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="service_bar" id="srv3">
+                        <label class="form-check-label" for="srv3">🍹 Bar/Restaurant Reservation (Free)</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="service_tour" id="srv4">
+                        <label class="form-check-label" for="srv4">🎟️ City Tour Tickets (+Rs. 2000)</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label>Promo Code (Optional)</label>
+                    <input type="text" name="promo_code" class="form-control" placeholder="Discount Code">
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">Proceed to Payment</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function calculateNights() {
+    const checkIn = new Date(document.getElementById('check_in').value);
+    const checkOut = new Date(document.getElementById('check_out').value);
+    
+    if (checkIn && checkOut && checkOut > checkIn) {
+        const diffTime = Math.abs(checkOut - checkIn);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+        document.getElementById('nights_display').innerText = diffDays;
+        document.getElementById('nights_input').value = diffDays;
+    } else {
+        document.getElementById('nights_display').innerText = "0";
+        document.getElementById('nights_input').value = 0;
+    }
+}
+</script>
+{% endblock %}

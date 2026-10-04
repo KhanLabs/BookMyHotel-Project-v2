@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5" style="max-width: 500px;">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <h4>Secure Payment Gateway</h4>
+        </div>
+        <div class="card-body">
+            <div class="text-center mb-3">
+                <h5>Total Amount: Rs. {{ booking.total_price }}</h5>
+            </div>
+            <form method="POST">
+                <div class="mb-3">
+                    <label>Card Number</label>
+                    <input type="text" class="form-control" placeholder="0000 0000 0000 0000" required>
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <label>Expiry</label>
+                        <input type="text" class="form-control" placeholder="MM/YY" required>
+                    </div>
+                    <div class="col">
+                        <label>CVC</label>
+                        <input type="text" class="form-control" placeholder="123" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label>Cardholder Name</label>
+                    <input type="text" class="form-control" placeholder="Name on Card" required>
+                </div>
+                <button type="submit" class="btn btn-success w-100">Pay & Confirm</button>
+            </form>
+            <div class="text-center mt-3">
+                <img src="https://img.icons8.com/color/48/000000/visa.png"/>
+                <img src="https://img.icons8.com/color/48/000000/mastercard.png"/>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

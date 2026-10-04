@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="hero text-center">
+    <h1>Find Your Next Stay</h1>
+    <p>Search hotels with Work-Friendly & Eco-Friendly options...</p>
+</div>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card card-body bg-light mb-4">
+                <h5>Filter Results</h5>
+                <form action="/" method="GET">
+                    <div class="mb-3">
+                        <label>Destination / Name</label>
+                        <input class="form-control" type="search" name="search" placeholder="City or Hotel" value="{{ request.args.get('search', '') }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label>Price Range (Rs.)</label>
+                        <div class="input-group mb-2">
+                            <input type="number" name="min_price" class="form-control" placeholder="Min" value="{{ request.args.get('min_price', '') }}">
+                            <input type="number" name="max_price" class="form-control" placeholder="Max" value="{{ request.args.get('max_price', '') }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="work_friendly" value="1" {% if request.args.get('work_friendly') %}checked{% endif %}>
+                            <label class="form-check-label">Work Friendly (High-Speed WiFi)</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="kitchen" value="1" {% if request.args.get('kitchen') %}checked{% endif %}>
+                            <label class="form-check-label">Kitchen Available</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="eco_friendly" value="1" {% if request.args.get('eco_friendly') %}checked{% endif %}>
+                            <label class="form-check-label text-success fw-bold">♻️ Eco-Friendly (>7.0)</label>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary w-100" type="submit">Apply Filters</button>
+                    <a href="/" class="btn btn-link w-100 mt-1">Clear Filters</a>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <h2 class="mb-4">Available Properties</h2>
+            <div class="row">
+                {% for hotel in hotels %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="{{ hotel.image_url }}" class="card-img-top" alt="{{ hotel.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ hotel.name }}</h5>
+                            <p class="text-muted mb-2"><small>{{ hotel.location }}</small></p>
+                            
+                            <div class="mb-2">
+                                <span class="badge bg-warning text-dark">★ {{ hotel.rating }}</span>
+                                {% if hotel.sustainability_rating >= 7.0 %}
+                                    <span class="badge bg-success">♻️ {{ hotel.sustainability_rating }} Eco</span>
+                                {% endif %}
+                                {% if hotel.is_work_friendly %}
+                                    <span class="badge bg-info text-dark">⚡ {{ hotel.wifi_speed }} Mbps</span>
+                                {% endif %}
+                                {% if hotel.has_kitchen %}
+                                    <span class="badge bg-secondary">🍳 Kitchen</span>
+                                {% endif %}
+                            </div>
+
+                            <p class="card-text small text-truncate">{{ hotel.description }}</p>
+                            <p class="fw-bold text-primary mb-1">Rs. {{ hotel.price }} <span class="text-muted small fw-normal">/ night</span></p>
+                            
+                            <a href="{{ url_for('book', hotel_id=hotel.id) }}" class="btn btn-outline-primary w-100 mt-2">View & Book</a>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="col-12 text-center py-5">
+                    <h3>No hotels found matching your criteria.</h3>
+                    <p>Try adjusting your filters.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

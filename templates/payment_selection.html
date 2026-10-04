@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5 text-center" style="max-width: 600px;">
+    <h2>Payment Method</h2>
+    <p>Complete your booking for <strong>{{ booking.hotel_name }}</strong>.</p>
+    <hr>
+    
+    <div class="alert alert-info shadow-sm text-start">
+        <h5>Booking Summary</h5>
+        <ul class="list-unstyled">
+            <li><strong>Room:</strong> {{ booking.room_name }}</li>
+            <li><strong>Guests:</strong> {{ booking.num_guests }}</li>
+            <li><strong>Rooms Booked:</strong> {{ booking.num_rooms }}</li>
+            <li><strong>Duration:</strong> {{ booking.nights }} Nights</li>
+        </ul>
+        <hr>
+        {% if booking.discount > 0 %}
+            <h5 class="text-muted text-decoration-line-through">Rs. {{ booking.original_price }}</h5>
+            <h3 class="text-success fw-bold">Rs. {{ booking.total_price }}</h3>
+            <span class="badge bg-success">
+                Promo '{{ booking.promo_used }}' Applied! Saved Rs. {{ booking.discount }}
+            </span>
+        {% else %}
+            <h3 class="fw-bold">Rs. {{ booking.total_price }}</h3>
+        {% endif %}
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h4>💳 Pay Online</h4>
+                    <a href="/process-payment/card" class="btn btn-primary w-100 mt-2">Pay Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body">
+                    <h4>🏨 Pay on Arrival</h4>
+                    <a href="/process-payment/arrival" class="btn btn-outline-secondary w-100 mt-2">Confirm Booking</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
